@@ -159,10 +159,9 @@ func getParameters(client *ssm.SSM, key string, types []string) (map[string]any,
 	if err := client.GetParametersByPathPages(&in, func(o *ssm.GetParametersByPathOutput, lastPage bool) bool {
 		if o != nil && len(o.Parameters) > 0 {
 			out.Parameters = append(out.Parameters, o.Parameters...)
-			return true
 		}
 
-		return false
+		return !lastPage
 	}); err != nil {
 		return nil, fmt.Errorf("could not fetch parameters: %v", err)
 	}
